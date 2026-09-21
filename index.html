@@ -21,9 +21,17 @@ body{
 
 /* PANTALLA INICIAL */
 .inicio{
-    position:fixed;
-    inset:0;
-    background: linear-gradient(135deg, #fff8e1, #e8c27a, #8b5a2b);
+    background:
+        radial-gradient(circle at center,
+        #fff8e7 0%,
+        #f5d58a 45%,
+        #b87925 100%);
+}
+
+.inicio h1{
+    color:#7a4300;
+    text-shadow:0 2px 5px rgba(255,255,255,.8);
+}
     display:flex;
     flex-direction:column;
     justify-content:center;
