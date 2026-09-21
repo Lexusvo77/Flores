@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Un regalo para ti 🌻</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family: "Georgia", serif;
+    overflow:hidden;
+    background:#050505;
+    color:white;
+}
+
+/* PANTALLA INICIAL */
+.inicio{
+    position:fixed;
+    inset:0;
+    background:
+        radial-gradient(circle at 50% 40%, #3b2600 0%, #120d02 35%, #020202 100%);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    z-index:20;
+    transition:1.2s;
+}
+
+.inicio.ocultar{
+    opacity:0;
+    pointer-events:none;
+}
+
+.inicio h1{
+    font-size:clamp(35px,10vw,70px);
+    color:#ffd84d;
+    text-shadow:
+        0 0 10px #ffcf00,
+        0 0 30px #ff9d00,
+        0 0 60px #ff7200;
+    animation: brillo 2s infinite alternate;
+}
+
+.inicio p{
+    margin-top:15px;
+    font-size:20px;
+    color:#fff4bd;
+}
+
+.regalo-btn{
+    margin-top:40px;
+    padding:18px 38px;
+    border:none;
+    border-radius:50px;
+    background:linear-gradient(135deg,#ffd600,#ff9d00);
+    color:#3d2500;
+    font-size:20px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 0 25px #ffb700;
+    transition:.3s;
+}
+
+.regalo-btn:hover{
+    transform:scale(1.08);
+}
+
+/* ESCENA */
+.escena{
+    position:fixed;
+    inset:0;
+    background:
+        linear-gradient(to bottom,#020617 0%,#101b08 70%,#142500 100%);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    pointer-events:none;
+    transition:1s;
+}
+
+.escena.activa{
+    opacity:1;
+    pointer-events:auto;
+}
+
+/* ESTRELLAS */
+.estrellas{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+}
+
+.estrella{
+    position:absolute;
+    width:3px;
+    height:3px;
+    background:white;
+    border-radius:50%;
+    box-shadow:0 0 8px white;
+    animation:parpadeo 2s infinite alternate;
+}
+
+/* SOBRE */
+.sobre-contenedor{
+    position:relative;
+    width:min(360px,85vw);
+    height:250px;
+    cursor:pointer;
+    perspective:1000px;
+    z-index:5;
+}
+
+.sobre{
+    position:absolute;
+    inset:0;
+    background:#d79a21;
+    border-radius:8px;
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.6),
+        0 0 30px rgba(255,193,7,.25);
+}
+
+.sobre:before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:#bd7812;
+    clip-path:polygon(0 0,50% 55%,100% 0);
+    transform-origin:top;
+    transition:1s;
+    z-index:4;
+}
+
+.sobre:after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:0;
+    width:100%;
+    height:65%;
+    background:#e9ad35;
+    clip-path:polygon(0 100%,50% 30%,100% 100%);
+    z-index:3;
+}
+
+.sello{
+    position:absolute;
+    top:48%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:65px;
+    height:65px;
+    background:#8b4e00;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
+    z-index:8;
+    box-shadow:0 0 20px #ffd000;
+    transition:.5s;
+}
+
+.texto-tocar{
+    position:absolute;
+    top:-65px;
+    width:100%;
+    text-align:center;
+    color:#ffe78a;
+    font-size:18px;
+    animation:flotar 2s infinite ease-in-out;
+}
+
+/* CARTA */
+.carta{
+    position:absolute;
+    width:min(390px,90vw);
+    max-height:80vh;
+    padding:35px 25px;
+    background:
+        linear-gradient(145deg,#fffdf1,#fff1b7);
+    color:#5b3b00;
+    border-radius:20px;
+    box-shadow:
+        0 0 50px rgba(255,211,65,.6),
+        0 20px 60px rgba(0,0,0,.7);
+    text-align:center;
+    opacity:0;
+    transform:scale(.5) translateY(100px);
+    transition:1s;
+    z-index:10;
+    overflow:auto;
+}
+
+.carta.mostrar{
+    opacity:1;
+    transform:scale(1) translateY(0);
+}
+
+.carta h2{
+    font-size:28px;
+    color:#d18a00;
+    margin-bottom:22px;
+    text-shadow:0 1px 0 white;
+}
+
+.carta p{
+    font-family:Arial,sans-serif;
+    font-size:18px;
+    line-height:1.7;
+    font-weight:600;
+}
+
+.te-amo{
+    margin-top:22px;
+    font-size:29px !important;
+    color:#b65d00;
+    font-family:Georgia,serif !important;
+    font-weight:bold !important;
+}
+
+/* GIRASOLES */
+.flores{
+    position:absolute;
+    bottom:-10px;
+    width:100%;
+    height:180px;
+    z-index:2;
+}
+
+.girasol{
+    position:absolute;
+    bottom:0;
+    animation:balanceo 3s infinite ease-in-out;
+}
+
+.tallo{
+    width:7px;
+    height:120px;
+    background:#267018;
+    margin:auto;
+    border-radius:10px;
+}
+
+.flower{
+    position:absolute;
+    top:-15px;
+    left:50%;
+    width:70px;
+    height:70px;
+    transform:translateX(-50%);
+}
+
+.petalo{
+    position:absolute;
+    width:24px;
+    height:40px;
+    background:#ffd21c;
+    border-radius:50%;
+    left:23px;
+    top:15px;
+    transform-origin:12px 20px;
+}
+
+.petalo:nth-child(1){transform:rotate(0deg) translateY(-25px);}
+.petalo:nth-child(2){transform:rotate(45deg) translateY(-25px);}
+.petalo:nth-child(3){transform:rotate(90deg) translateY(-25px);}
+.petalo:nth-child(4){transform:rotate(135deg) translateY(-25px);}
+.petalo:nth-child(5){transform:rotate(180deg) translateY(-25px);}
+.petalo:nth-child(6){transform:rotate(225deg) translateY(-25px);}
+.petalo:nth-child(7){transform:rotate(270deg) translateY(-25px);}
+.petalo:nth-child(8){transform:rotate(315deg) translateY(-25px);}
+
+.centro{
+    position:absolute;
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#553000;
+    left:18px;
+    top:18px;
+    z-index:5;
+    box-shadow:inset 0 0 10px #1e1100;
+}
+
+/* PÉTALOS CAYENDO */
+.petalo-caida{
+    position:fixed;
+    top:-30px;
+    color:#ffd21c;
+    font-size:22px;
+    z-index:15;
+    animation:caer linear forwards;
+    pointer-events:none;
+}
+
+/* ANIMACIONES */
+@keyframes brillo{
+    from{filter:brightness(1);}
+    to{filter:brightness(1.35);}
+}
+
+@keyframes parpadeo{
+    from{opacity:.2;}
+    to{opacity:1;}
+}
+
+@keyframes flotar{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-8px);}
+}
+
+@keyframes balanceo{
+    0%,100%{transform:rotate(-2deg);}
+    50%{transform:rotate(3deg);}
+}
+
+@keyframes caer{
+    0%{
+        transform:translateY(-50px) rotate(0deg);
+        opacity:1;
+    }
+    100%{
+        transform:translateY(110vh) rotate(720deg);
+        opacity:0;
+    }
+}
+
+@media(max-width:500px){
+    .carta{
+        padding:28px 20px;
+    }
+
+    .carta h2{
+        font-size:23px;
+    }
+
+    .carta p{
+        font-size:16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- PANTALLA DE INICIO -->
+<section class="inicio" id="inicio">
+
+    <h1>Tengo un regalo para ti... 🌻</h1>
+
+    <p>Pero tienes que tocarlo para descubrirlo 💛</p>
+
+    <button class="regalo-btn" onclick="abrirRegalo()">
+        🎁 TÓCALO 🎁
+    </button>
+
+</section>
+
+
+<!-- ESCENA -->
+<section class="escena" id="escena">
+
+    <div class="estrellas" id="estrellas"></div>
+
+    <!-- FLORES -->
+    <div class="flores">
+
+        <div class="girasol" style="left:5%; transform:scale(.7)">
+            <div class="flower">
+                <span class="petalo"></span><span class="petalo"></span>
+                <span class="petalo"></span><span class="petalo"></span>
+                <span class="petalo"></span><span class="petalo"></span>
+                <span class="petalo"></span><span class="petalo"></span>
+                <div class="centro"></div>
+            </div>
+            <div class="tallo"></div>
+        </div>
+
+        <div class="girasol" style="left:25%; transform:scale(.9)">
+            <div class="flower">
+                <span class="petalo"></span><span class="petalo"></span>
+                <span class="petalo"></span><span class="petalo"></span>
+                <span class="petalo"></span><span class="petalo"></span>
+                <span class="petalo"></span><span class="petalo"></span>
+                <div class="centro"></div>
+            </div>
+            <div class="tallo"></div>
+        </div>
+
+        <div class="girasol" style="left:47%; transform:scale(1.15)">
+            <div class="flower">
+                <span class="petalo"></span><span class="petalo"></span>
+                <span class="petalo"></span><span class="petalo"></span>
+                <span class="petalo"></span><span class="petalo"></span>
+                <span class="petalo"></span><span class="petalo"></span>
+                <div class="centro"></div>
+            </div>
+            <div class="tallo"></div>
+        </div>
+
+        <div class="girasol" style="left:70%; transform:scale(.85)">
+            <div class="flower">
+                <span class="petalo"></span><span class="petalo"></span>
+                <span class="petalo"></span><span class="petalo"></span>
+                <span class="petalo"></span><span class="petalo"></span>
+                <span class="petalo"></span><span class="petalo"></span>
+                <div class="centro"></div>
+            </div>
+            <div class="tallo"></div>
+        </div>
+
+        <div class="girasol" style="left:88%; transform:scale(.65)">
+            <div class="flower">
+                <span class="petalo"></span><span class="petalo"></span>
+                <span class="petalo"></span><span class="petalo"></span>
+                <span class="petalo"></span><span class="petalo"></span>
+                <span class="petalo"></span><span class="petalo"></span>
+                <div class="centro"></div>
+            </div>
+            <div class="tallo"></div>
+        </div>
+
+    </div>
+
+
+    <!-- SOBRE -->
+    <div class="sobre-contenedor" id="sobreContenedor">
+
+        <div class="texto-tocar">
+            💌 Toca el sobre 💌
+        </div>
+
+        <div class="sobre" id="sobre">
+
+            <div class="sello">🌻</div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CARTA -->
+    <div class="carta" id="carta">
+
+        <h2>🌻 FELIZ DÍA DE LAS FLORES AMARILLAS 🌻</h2>
+
+        <p>
+            EN CADA GIRASOL QUE VEO TE VEO A TI
+            Y EN CADA LATIDO DE MI CORAZÓN ESTÁS.
+            <br><br>
+
+            ASÍ COMO EL SOL ILUMINA LOS CAMPOS,
+            TÚ ILUMINAS MI VIDA.
+            <br><br>
+
+            QUE ESTAS FLORES TE RECUERDEN
+            LO ESPECIAL QUE ERES PARA MÍ.
+        </p>
+
+        <p class="te-amo">
+            — ¡ I LOVE YOU! ❤️
+        </p>
+
+    </div>
+
+</section>
+
+
+<script>
+
+/* CREAR ESTRELLAS */
+const estrellas = document.getElementById("estrellas");
+
+for(let i=0;i<80;i++){
+
+    let estrella=document.createElement("div");
+
+    estrella.className="estrella";
+
+    estrella.style.left=Math.random()*100+"%";
+    estrella.style.top=Math.random()*75+"%";
+
+    estrella.style.animationDelay=(Math.random()*3)+"s";
+
+    estrellas.appendChild(estrella);
+}
+
+
+/* ABRIR REGALO */
+function abrirRegalo(){
+
+    document.getElementById("inicio")
+        .classList.add("ocultar");
+
+    document.getElementById("escena")
+        .classList.add("activa");
+
+}
+
+
+/* ABRIR SOBRE */
+document.getElementById("sobreContenedor")
+.addEventListener("click",function(){
+
+    document.getElementById("sobreContenedor")
+        .style.transform="scale(.4)";
+
+    document.getElementById("sobreContenedor")
+        .style.opacity="0";
+
+    setTimeout(()=>{
+
+        document.getElementById("carta")
+            .classList.add("mostrar");
+
+        crearPetalos();
+
+    },500);
+
+});
+
+
+/* PÉTALOS */
+function crearPetalos(){
+
+    for(let i=0;i<45;i++){
+
+        setTimeout(()=>{
+
+            let petalo=document.createElement("div");
+
+            petalo.className="petalo-caida";
+
+            petalo.innerHTML="🌻";
+
+            petalo.style.left=Math.random()*100+"vw";
+
+            petalo.style.animationDuration=
+                (4+Math.random()*5)+"s";
+
+            petalo.style.fontSize=
+                (14+Math.random()*18)+"px";
+
+            document.body.appendChild(petalo);
+
+            setTimeout(()=>{
+                petalo.remove();
+            },9000);
+
+        },i*150);
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
